@@ -13,7 +13,7 @@ export default function SignupMultiStep() {
   const [contentTypes, setContentTypes] = useState<MultiValue<OptionType>>([]);
   const [customOther, setCustomOther] = useState(""); // custom text for "Other"
   const contentOptions: OptionType[] = [
-    { value: "coding", label: "Coding" },
+    { value: "coding", label: "Coding" },  
     { value: "blogging", label: "Blogging" },
     { value: "research", label: "Research" },
     { value: "design", label: "Design" },
