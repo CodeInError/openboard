@@ -13,7 +13,7 @@ export default function SignupMultiStep() {
   const [contentTypes, setContentTypes] = useState<MultiValue<OptionType>>([]);
   const [customOther, setCustomOther] = useState(""); // custom text for "Other"
   const contentOptions: OptionType[] = [
-    { value: "coding", label: "Coding" },  
+    { value: "coding", label: "Coding" },
     { value: "blogging", label: "Blogging" },
     { value: "research", label: "Research" },
     { value: "design", label: "Design" },
@@ -129,11 +129,10 @@ export default function SignupMultiStep() {
                 type="button"
                 disabled={selectedContent.length === 0}
                 onClick={() => setStep(2)}
-                className={`w-full py-3 rounded font-semibold transition ${
-                  selectedContent.length > 0
+                className={`w-full py-3 rounded font-semibold transition ${selectedContent.length > 0
                     ? "bg-[#4aca35] text-white hover:bg-[#3fb92e]"
                     : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                }`}
+                  }`}
               >
                 Next
               </button>
@@ -161,11 +160,10 @@ export default function SignupMultiStep() {
               {actionOptions.map((action) => (
                 <label
                   key={action}
-                  className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition ${
-                    selectedActions.includes(action)
+                  className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition ${selectedActions.includes(action)
                       ? "bg-[#4aca35]/20 border-[#4aca35]"
                       : "border-gray-300 dark:border-gray-600"
-                  }`}
+                    }`}
                 >
                   <input
                     type="checkbox"
@@ -189,11 +187,10 @@ export default function SignupMultiStep() {
               <button
                 type="button"
                 disabled={selectedActions.length === 0}
-                className={`w-1/2 py-3 rounded font-semibold transition ${
-                  selectedActions.length > 0
+                className={`w-1/2 py-3 rounded font-semibold transition ${selectedActions.length > 0
                     ? "bg-[#4aca35] text-white hover:bg-[#3fb92e]"
                     : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                }`}
+                  }`}
               >
                 Finish
               </button>
