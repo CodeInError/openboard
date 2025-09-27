@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Select, { type MultiValue } from "react-select";
-import logoFinal1 from "app/welcome/logoFinal1.png"; // update your path
 import openboard from "app/welcome/openboard.png";
 import { Link } from "react-router";
 
@@ -11,7 +10,7 @@ export default function SignupMultiStep() {
 
   // Step 1 state
   const [contentTypes, setContentTypes] = useState<MultiValue<OptionType>>([]);
-  const [customOther, setCustomOther] = useState(""); // custom text for "Other"
+  const [customOther, setCustomOther] = useState("");
   const contentOptions: OptionType[] = [
     { value: "coding", label: "Coding" },
     { value: "blogging", label: "Blogging" },
@@ -28,14 +27,18 @@ export default function SignupMultiStep() {
     "Share Video (Reels / Full)",
     "Share Code / Tutorials",
   ];
-
   const toggleAction = (action: string) => {
     setSelectedActions((prev) =>
       prev.includes(action) ? prev.filter((a) => a !== action) : [...prev, action]
     );
   };
 
-  // React-select custom styles
+  // Step 3 toggle state
+  const [loginProvider, setLoginProvider] = useState<"email" | "phone" | "linkedin">(
+    "email"
+  );
+
+  // react-select custom styles
   const customStyles = {
     control: (base: any) => ({
       ...base,
@@ -44,16 +47,6 @@ export default function SignupMultiStep() {
       "&:hover": { borderColor: "#4aca35" },
       backgroundColor: "white",
     }),
-    multiValue: (base: any) => ({ ...base, backgroundColor: "#e6f5e6" }),
-    multiValueLabel: (base: any) => ({ ...base, color: "#4aca35" }),
-    singleValue: (base: any) => ({ ...base, color: "#000" }),
-    option: (base: any, state: any) => ({
-      ...base,
-      color: state.isSelected ? "#4aca35" : "#000",
-      backgroundColor: state.isSelected ? "#e6f5e6" : "#fff",
-      "&:hover": { backgroundColor: "#d4f0d4" },
-    }),
-    menu: (base: any) => ({ ...base, zIndex: 9999 }),
   };
 
   // Combine selected options + custom "Other" text
@@ -84,23 +77,16 @@ export default function SignupMultiStep() {
 
       {/* Left Section */}
       <div className="flex-1 flex flex-col justify-center px-12">
+        {/* Step 1 */}
         {step === 1 && (
           <>
-            <div
-              className="text-xs font-semibold uppercase mb-4"
-              style={{ color: "#4aca35" }}
-            >
-              Step 1 of 2
+            <div className="text-xs font-semibold uppercase mb-4" style={{ color: "#4aca35" }}>
+              Step 1 of 3
             </div>
-
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
               What's your content about?
             </h2>
-            <p className="text-gray-500 dark:text-gray-300 mb-8">
-              Create and consume knowledge.
-            </p>
 
-            {/* Multi-select Dropdown */}
             <div className="mb-8 max-w-lg">
               <Select
                 value={contentTypes}
@@ -112,7 +98,6 @@ export default function SignupMultiStep() {
                 isSearchable
               />
 
-              {/* If "Other" is selected, show a text input */}
               {contentTypes.some((ct) => ct.value === "other") && (
                 <input
                   type="text"
@@ -129,10 +114,11 @@ export default function SignupMultiStep() {
                 type="button"
                 disabled={selectedContent.length === 0}
                 onClick={() => setStep(2)}
-                className={`w-full py-3 rounded font-semibold transition ${selectedContent.length > 0
+                className={`w-full py-3 rounded font-semibold transition ${
+                  selectedContent.length > 0
                     ? "bg-[#4aca35] text-white hover:bg-[#3fb92e]"
                     : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                  }`}
+                } cursor-pointer`}
               >
                 Next
               </button>
@@ -140,30 +126,25 @@ export default function SignupMultiStep() {
           </>
         )}
 
+        {/* Step 2 */}
         {step === 2 && (
           <>
-            <div
-              className="text-xs font-semibold uppercase mb-4"
-              style={{ color: "#4aca35" }}
-            >
+            <div className="text-xs font-semibold uppercase mb-4" style={{ color: "#4aca35" }}>
               Step 2 of 3
             </div>
-
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
               What do you want to do with your OpenBoard Page?
             </h2>
-            <p className="text-gray-500 dark:text-gray-300 mb-8">
-              Select all that apply. You can choose multiple actions.
-            </p>
 
             <div className="flex flex-col gap-4 max-w-lg mb-8">
               {actionOptions.map((action) => (
                 <label
                   key={action}
-                  className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition ${selectedActions.includes(action)
+                  className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition ${
+                    selectedActions.includes(action)
                       ? "bg-[#4aca35]/20 border-[#4aca35]"
                       : "border-gray-300 dark:border-gray-600"
-                    }`}
+                  }`}
                 >
                   <input
                     type="checkbox"
@@ -180,21 +161,143 @@ export default function SignupMultiStep() {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="w-1/2 py-3 rounded font-semibold border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                className="w-1/2 py-3 rounded font-semibold border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer"
               >
                 Back
               </button>
               <button
                 type="button"
                 disabled={selectedActions.length === 0}
-                className={`w-1/2 py-3 rounded font-semibold transition ${selectedActions.length > 0
+                onClick={() => setStep(3)}
+                className={`w-1/2 py-3 rounded font-semibold transition ${
+                  selectedActions.length > 0
                     ? "bg-[#4aca35] text-white hover:bg-[#3fb92e]"
                     : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                  }`}
+                } cursor-pointer`}
               >
                 Finish
               </button>
             </div>
+          </>
+        )}
+
+        {/* Step 3 */}
+        {step === 3 && (
+          <>
+            <div className="text-xs font-semibold uppercase mb-4" style={{ color: "#4aca35" }}>
+              Final Step
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+              Create your account
+            </h2>
+
+            <form className="max-w-lg flex flex-col gap-4">
+              <input
+                type="text"
+                placeholder="Full Name"
+                className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-[#4aca35]"
+              />
+
+              {/* Conditional Inputs */}
+              {loginProvider === "email" && (
+                <>
+                  <input
+                    type="email"
+                    placeholder="Email Address"
+                    className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-[#4aca35]"
+                  />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-[#4aca35]"
+                  />
+                  <input
+                    type="password"
+                    placeholder="Re-enter Password"
+                    className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-[#4aca35]"
+                  />
+                  <label className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      className="w-5 h-5 text-[#4aca35] accent-[#4aca35] cursor-pointer"
+                    />
+                    <span className="text-gray-900 dark:text-white">I'm not a robot</span>
+                  </label>
+                </>
+              )}
+
+              {loginProvider === "phone" && (
+                <>
+                  <input
+                    type="tel"
+                    placeholder="Phone Number"
+                    className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-[#4aca35]"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Enter OTP"
+                    className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-[#4aca35]"
+                  />
+                </>
+              )}
+
+              {loginProvider === "linkedin" && (
+                <>
+                  <input
+                    type="text"
+                    placeholder="LinkedIn Username"
+                    className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-[#4aca35]"
+                  />
+                  <input
+                    type="password"
+                    placeholder="LinkedIn Password"
+                    className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-[#4aca35]"
+                  />
+                </>
+              )}
+
+              <button
+                type="submit"
+                className="w-full py-3 rounded font-semibold bg-[#4aca35] text-white hover:bg-[#3fb92e] transition cursor-pointer"
+              >
+                Sign Up
+              </button>
+
+              {/* Social Signup Icons */}
+              <div className="flex justify-center gap-4 mt-4">
+                {/* Email / Phone toggle */}
+                <button
+                  type="button"
+                  className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-100 transition cursor-pointer"
+                  onClick={() =>
+                    setLoginProvider(loginProvider === "phone" ? "email" : "phone")
+                  }
+                >
+                  <img
+                    src={
+                      loginProvider === "phone"
+                        ? "https://cdn-icons-png.flaticon.com/512/281/281764.png" // Gmail
+                        : "https://cdn-icons-png.flaticon.com/512/597/597177.png" // Phone
+                    }
+                    alt={loginProvider === "phone" ? "Email" : "Phone"}
+                    className="w-5 h-5"
+                  />
+                </button>
+
+                {/* LinkedIn */}
+                <button
+                  type="button"
+                  className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-100 transition cursor-pointer"
+                  onClick={() => setLoginProvider("linkedin")}
+                >
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+                    alt="LinkedIn"
+                    className="w-5 h-5"
+                  />
+                </button>
+              </div>
+            </form>
           </>
         )}
       </div>
